@@ -1,4 +1,3 @@
-using System.Text;
 using EmailSender.Dtos;
 using EmailSender.Interfaces;
 using FluentEmail.Core;
@@ -20,9 +19,9 @@ public class EmailService(IFluentEmail fluentEmail) : IEmailService
       SendResponse result;
 
       // If there is an attachment, add it to the email and send the email.
-      if (!string.IsNullOrWhiteSpace(emailRequest.Attachment) && !string.IsNullOrWhiteSpace(emailRequest.AttachmentName))
+      if (emailRequest.Attachment is not null && !string.IsNullOrWhiteSpace(emailRequest.AttachmentName))
       {
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(emailRequest.Attachment));
+        using var stream = new MemoryStream(emailRequest.Attachment);
         email.Attach(new Attachment
         {
           Data = stream,
